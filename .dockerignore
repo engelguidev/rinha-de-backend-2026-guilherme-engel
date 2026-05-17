@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/*.user
+**/*.suo
+**/*.cache
+**/*.pdb
+**/*.nupkg
+**/*.snupkg
+**/node_modules/
+resources/
+docs/
+*.txt
+/branch-submission

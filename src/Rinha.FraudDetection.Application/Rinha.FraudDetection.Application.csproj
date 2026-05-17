@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Rinha.FraudDetection.Application</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Rinha.FraudDetection.Domain\Rinha.FraudDetection.Domain.csproj" />
+  </ItemGroup>
+</Project>

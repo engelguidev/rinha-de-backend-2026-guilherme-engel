@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <AssemblyName>Rinha.FraudDetection.Presentation</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Rinha.FraudDetection.Application\Rinha.FraudDetection.Application.csproj" />
+    <ProjectReference Include="..\Rinha.FraudDetection.Infrastructure\Rinha.FraudDetection.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

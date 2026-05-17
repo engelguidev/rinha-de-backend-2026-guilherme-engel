@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Rinha.FraudDetection.Domain</AssemblyName>
+  </PropertyGroup>
+</Project>

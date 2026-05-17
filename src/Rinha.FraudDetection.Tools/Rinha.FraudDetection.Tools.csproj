@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Rinha.FraudDetection.Tools</AssemblyName>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Rinha.FraudDetection.Infrastructure\Rinha.FraudDetection.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

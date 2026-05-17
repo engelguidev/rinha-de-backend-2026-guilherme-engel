@@ -1,0 +1,35 @@
+# Build outputs
+**/bin/
+**/obj/
+**/out/
+**/publish/
+
+# User-specific files
+**/*.user
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+
+# IDE
+.vs/
+.vscode/
+
+# NuGet
+**/*.nupkg
+**/*.snupkg
+
+# Logs
+**/*.log
+
+# Docker local artifacts
+**/Dockerfile.local
+
+# Large datasets / local resources
+/resources/
+/data/
+
+# Docs
+*.txt
+/branch-submission
+/testes
+/docs
