@@ -17,10 +17,20 @@ var indexPath = Environment.GetEnvironmentVariable("INDEX_PATH")
 builder.Services.AddSingleton<IResourceProvider>(_ => new JsonResourceProvider(resourcesPath));
 builder.Services.AddSingleton<IAppReadiness, AppReadiness>();
 builder.Services.AddSingleton<IVectorizer, DefaultVectorizer>();
-builder.Services.AddSingleton(new MmapIndexOptions { IndexPath = indexPath });
-builder.Services.AddSingleton<MmapIndexSearch>();
-builder.Services.AddSingleton<IVectorIndex>(sp => sp.GetRequiredService<MmapIndexSearch>());
-builder.Services.AddSingleton<IVectorSearch>(sp => sp.GetRequiredService<MmapIndexSearch>());
+var useBrute = (Environment.GetEnvironmentVariable("USE_BRUTE") ?? "false").Equals("true", StringComparison.OrdinalIgnoreCase);
+if (useBrute)
+{
+    builder.Services.AddSingleton<BruteForceIndexSearch>(_ => new BruteForceIndexSearch(indexPath));
+    builder.Services.AddSingleton<IVectorIndex>(sp => sp.GetRequiredService<BruteForceIndexSearch>());
+    builder.Services.AddSingleton<IVectorSearch>(sp => sp.GetRequiredService<BruteForceIndexSearch>());
+}
+else
+{
+    builder.Services.AddSingleton(new MmapIndexOptions { IndexPath = indexPath });
+    builder.Services.AddSingleton<MmapIndexSearch>();
+    builder.Services.AddSingleton<IVectorIndex>(sp => sp.GetRequiredService<MmapIndexSearch>());
+    builder.Services.AddSingleton<IVectorSearch>(sp => sp.GetRequiredService<MmapIndexSearch>());
+}
 builder.Services.AddSingleton<DetectFraudUseCase>();
 builder.Services.AddHostedService<IndexWarmupService>();
 

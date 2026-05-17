@@ -21,6 +21,7 @@ services:
     environment:
       - RESOURCES_PATH=/app/resources
       - INDEX_PATH=/app/data/knn.idx
+      - USE_BRUTE=true
     volumes:
       - ./resources:/app/resources:ro
       - ./data:/app/data:ro
@@ -37,6 +38,7 @@ services:
     environment:
       - RESOURCES_PATH=/app/resources
       - INDEX_PATH=/app/data/knn.idx
+      - USE_BRUTE=true
     volumes:
       - ./resources:/app/resources:ro
       - ./data:/app/data:ro
