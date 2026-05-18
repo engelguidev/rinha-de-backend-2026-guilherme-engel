@@ -22,5 +22,7 @@ ENV DOTNET_gcServer=1
 ENV DOTNET_GCHeapHardLimit=200000000
 
 COPY --from=build /app/publish ./
+COPY resources/ /app/resources/
+COPY data/ /app/data/
 
 ENTRYPOINT ["dotnet", "Rinha.FraudDetection.Presentation.dll"]

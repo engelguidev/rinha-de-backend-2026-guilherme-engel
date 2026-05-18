@@ -1,5 +1,3 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Rinha.FraudDetection.Application.Interfaces;
 using Rinha.FraudDetection.Application.Models;
 
@@ -7,91 +5,65 @@ namespace Rinha.FraudDetection.Infrastructure.Resources;
 
 public sealed class JsonResourceProvider : IResourceProvider
 {
-    private readonly string _basePath;
-    private readonly JsonSerializerOptions _jsonOptions;
     private NormalizationConfig? _normalization;
     private MccRiskTable? _mccRisk;
 
     public JsonResourceProvider(string basePath)
     {
-        _basePath = basePath;
-        _jsonOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
+        _ = basePath;
     }
 
-    public async Task<NormalizationConfig> GetNormalizationAsync(CancellationToken cancellationToken)
+    public Task<NormalizationConfig> GetNormalizationAsync(CancellationToken cancellationToken)
     {
         if (_normalization is not null)
         {
-            return _normalization;
+            return Task.FromResult(_normalization);
         }
 
-        var path = Path.Combine(_basePath, "normalization.json");
-        await using var stream = File.OpenRead(path);
-        var data = await JsonSerializer.DeserializeAsync<NormalizationData>(stream, _jsonOptions, cancellationToken);
+        _normalization = BuildDefaultNormalization();
 
-        if (data is null)
-        {
-            throw new InvalidOperationException("Unable to load normalization.json.");
-        }
-
-        _normalization = new NormalizationConfig
-        {
-            MaxAmount = data.MaxAmount,
-            MaxInstallments = data.MaxInstallments,
-            AmountVsAvgRatio = data.AmountVsAvgRatio,
-            MaxMinutes = data.MaxMinutes,
-            MaxKm = data.MaxKm,
-            MaxTxCount24h = data.MaxTxCount24h,
-            MaxMerchantAvgAmount = data.MaxMerchantAvgAmount
-        };
-
-        return _normalization;
+        return Task.FromResult(_normalization);
     }
 
-    public async Task<MccRiskTable> GetMccRiskAsync(CancellationToken cancellationToken)
+    private static NormalizationConfig BuildDefaultNormalization()
+    {
+        return new NormalizationConfig
+        {
+            MaxAmount = 10000,
+            MaxInstallments = 12,
+            AmountVsAvgRatio = 10,
+            MaxMinutes = 1440,
+            MaxKm = 1000,
+            MaxTxCount24h = 20,
+            MaxMerchantAvgAmount = 10000
+        };
+    }
+
+    public Task<MccRiskTable> GetMccRiskAsync(CancellationToken cancellationToken)
     {
         if (_mccRisk is not null)
         {
-            return _mccRisk;
+            return Task.FromResult(_mccRisk);
         }
 
-        var path = Path.Combine(_basePath, "mcc_risk.json");
-        await using var stream = File.OpenRead(path);
-        var data = await JsonSerializer.DeserializeAsync<Dictionary<string, float>>(stream, _jsonOptions, cancellationToken);
-
-        if (data is null)
-        {
-            throw new InvalidOperationException("Unable to load mcc_risk.json.");
-        }
-
-        _mccRisk = new MccRiskTable(data);
-        return _mccRisk;
+        _mccRisk = BuildDefaultMccRisk();
+        return Task.FromResult(_mccRisk);
     }
 
-    private sealed class NormalizationData
+    private static MccRiskTable BuildDefaultMccRisk()
     {
-        [JsonPropertyName("max_amount")]
-        public double MaxAmount { get; init; }
-
-        [JsonPropertyName("max_installments")]
-        public double MaxInstallments { get; init; }
-
-        [JsonPropertyName("amount_vs_avg_ratio")]
-        public double AmountVsAvgRatio { get; init; }
-
-        [JsonPropertyName("max_minutes")]
-        public double MaxMinutes { get; init; }
-
-        [JsonPropertyName("max_km")]
-        public double MaxKm { get; init; }
-
-        [JsonPropertyName("max_tx_count_24h")]
-        public double MaxTxCount24h { get; init; }
-
-        [JsonPropertyName("max_merchant_avg_amount")]
-        public double MaxMerchantAvgAmount { get; init; }
+        return new MccRiskTable(new Dictionary<string, float>
+        {
+            { "4511", 0.35f },
+            { "5311", 0.25f },
+            { "5411", 0.15f },
+            { "5812", 0.30f },
+            { "5912", 0.20f },
+            { "5944", 0.45f },
+            { "5999", 0.50f },
+            { "7801", 0.80f },
+            { "7802", 0.75f },
+            { "7995", 0.85f }
+        });
     }
 }

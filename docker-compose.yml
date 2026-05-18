@@ -19,12 +19,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - RESOURCES_PATH=/app/resources
       - INDEX_PATH=/app/data/knn.idx
-      - USE_BRUTE=true
-    volumes:
-      - ./resources:/app/resources:ro
-      - ./data:/app/data:ro
     deploy:
       resources:
         limits:
@@ -36,12 +31,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - RESOURCES_PATH=/app/resources
       - INDEX_PATH=/app/data/knn.idx
-      - USE_BRUTE=true
-    volumes:
-      - ./resources:/app/resources:ro
-      - ./data:/app/data:ro
     deploy:
       resources:
         limits:
