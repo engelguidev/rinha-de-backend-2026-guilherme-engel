@@ -1,7 +1,6 @@
 services:
   lb:
     image: nginx:1.27-alpine
-    container_name: lb
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - uds:/run/uds
@@ -19,87 +18,105 @@ services:
 
   api1:
     image: engelguidev/rinha-fraud-api:latest
-    container_name: api1
     environment:
       - UDS_PATH=/run/uds/api1.sock
 
+      # Runtime
       - DOTNET_GCHeapCount=1
       - DOTNET_PROCESSOR_COUNT=1
       - DOTNET_ThreadPool_UnfairSemaphoreSpinLimit=0
+      - GC_LATENCY_MODE=sustained
 
+      # Paths
       - INDEX_PATH=/app/data/knn.idx
+      - IVF_INDEX_PATH=/app/data/ivf.idx
       - RESOURCES_PATH=/app/resources
 
+      # Search
       - USE_BRUTE=false
       - USE_IVF=true
 
-      - IVF_INDEX_PATH=/app/data/ivf.idx
-      - IVF_CLUSTERS=256
+      # MELHOR CONFIG ENCONTRADA
+      - IVF_CLUSTERS=128
       - IVF_NPROBE=1
-      - IVF_MAX_VECTORS=128
+      - IVF_MAX_VECTORS=32
+      - IVF_ITERS=7
 
-      - ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT=Error
-
-      - KNN_K=1
+      # KNN
+      - KNN_K=5
       - FRAUD_THRESHOLD=0.60
 
+      # Partitioning
       - MAX_PARTITIONS_TO_SCAN=1
       - MAX_PARTITION_ITEMS=64
       - MAX_PARTITION_HARD=true
       - PARTITION_ONLY=true
 
+      # ThreadPool
+      - TP_MIN_WORKERS=4
+      - TP_MAX_WORKERS=4
+      - TP_MIN_IO=2
+      - TP_MAX_IO=4
+
+      # ASP.NET
+      - KESTREL_BACKLOG=4096
+      - ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT=Warning
+
     volumes:
       - uds:/run/uds
-
     cpus: "0.42"
     mem_limit: 160m
-
-    ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
 
   api2:
     image: engelguidev/rinha-fraud-api:latest
-    container_name: api2
     environment:
       - UDS_PATH=/run/uds/api2.sock
 
+      # Runtime
       - DOTNET_GCHeapCount=1
       - DOTNET_PROCESSOR_COUNT=1
       - DOTNET_ThreadPool_UnfairSemaphoreSpinLimit=0
+      - GC_LATENCY_MODE=sustained
 
+      # Paths
       - INDEX_PATH=/app/data/knn.idx
+      - IVF_INDEX_PATH=/app/data/ivf.idx
       - RESOURCES_PATH=/app/resources
 
+      # Search
       - USE_BRUTE=false
       - USE_IVF=true
 
-      - IVF_INDEX_PATH=/app/data/ivf.idx
-      - IVF_CLUSTERS=256
+      # MELHOR CONFIG ENCONTRADA
+      - IVF_CLUSTERS=128
       - IVF_NPROBE=1
-      - IVF_MAX_VECTORS=128
+      - IVF_MAX_VECTORS=32
+      - IVF_ITERS=7
 
-      - ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT=Error
-
-      - KNN_K=1
+      # KNN
+      - KNN_K=5
       - FRAUD_THRESHOLD=0.60
 
+      # Partitioning
       - MAX_PARTITIONS_TO_SCAN=1
       - MAX_PARTITION_ITEMS=64
       - MAX_PARTITION_HARD=true
       - PARTITION_ONLY=true
 
+      # ThreadPool
+      - TP_MIN_WORKERS=4
+      - TP_MAX_WORKERS=4
+      - TP_MIN_IO=2
+      - TP_MAX_IO=4
+
+      # ASP.NET
+      - KESTREL_BACKLOG=4096
+      - ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT=Warning
+
     volumes:
       - uds:/run/uds
-
     cpus: "0.42"
     mem_limit: 160m
-
-    ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
 
 volumes:
   uds:
@@ -108,5 +125,5 @@ volumes:
       device: tmpfs
 
 networks:
-  default:
+  app:
     driver: bridge
