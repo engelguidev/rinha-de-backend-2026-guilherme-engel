@@ -15,13 +15,9 @@ services:
           memory: "20MB"
 
   api1:
-    image: engelguidev/rinha-fraud-api@sha256:d703e11f7acf4c0aa8ebcbf4d9df12220575e64bef20e90c3940aecfb9a9a737
+    image: engelguidev/rinha-fraud-api:latest
     environment:
-      - RESOURCES_PATH=/app/resources
       - INDEX_PATH=/app/data/knn.idx
-    volumes:
-      - ./resources:/app/resources:ro
-      - ./data:/app/data:ro
     deploy:
       resources:
         limits:
@@ -29,13 +25,9 @@ services:
           memory: "165MB"
 
   api2:
-    image: engelguidev/rinha-fraud-api@sha256:d703e11f7acf4c0aa8ebcbf4d9df12220575e64bef20e90c3940aecfb9a9a737
+    image: engelguidev/rinha-fraud-api:latest
     environment:
-      - RESOURCES_PATH=/app/resources
       - INDEX_PATH=/app/data/knn.idx
-    volumes:
-      - ./resources:/app/resources:ro
-      - ./data:/app/data:ro
     deploy:
       resources:
         limits:
