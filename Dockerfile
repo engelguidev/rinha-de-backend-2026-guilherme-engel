@@ -19,7 +19,7 @@ WORKDIR /app
 
 ENV ASPNETCORE_URLS=http://0.0.0.0:9999
 ENV DOTNET_gcServer=1
-ENV DOTNET_GCHeapHardLimit=200000000
+ENV DOTNET_GCHeapHardLimit=150000000
 
 COPY --from=build /app/publish ./
 COPY resources/ /app/resources/

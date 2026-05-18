@@ -36,7 +36,6 @@ public class DefaultVectorizerTests
 
         var vector = _vectorizer.Vectorize(payload, normalization, mccRisk);
 
-        Assert.NotNull(vector);
         Assert.Equal(14, vector.Values.Length);
     }
 

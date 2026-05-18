@@ -37,7 +37,8 @@ public class DetectFraudUseCaseTests
         resourceMock.Setup(r => r.GetMccRiskAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new MccRiskTable(new Dictionary<string, float>()));
 
-        var useCase = new DetectFraudUseCase(vectorizerMock.Object, searchMock.Object, resourceMock.Object);
+        var options = new FraudDetectionOptions { KnnK = 5, FraudThreshold = 0.6f };
+        var useCase = new DetectFraudUseCase(vectorizerMock.Object, searchMock.Object, resourceMock.Object, options);
 
         var result = await useCase.ExecuteAsync(payload, CancellationToken.None);
 
@@ -72,7 +73,8 @@ public class DetectFraudUseCaseTests
         resourceMock.Setup(r => r.GetMccRiskAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new MccRiskTable(new Dictionary<string, float>()));
 
-        var useCase = new DetectFraudUseCase(vectorizerMock.Object, searchMock.Object, resourceMock.Object);
+        var options = new FraudDetectionOptions { KnnK = 5, FraudThreshold = 0.6f };
+        var useCase = new DetectFraudUseCase(vectorizerMock.Object, searchMock.Object, resourceMock.Object, options);
 
         var result = await useCase.ExecuteAsync(payload, CancellationToken.None);
 
@@ -107,7 +109,8 @@ public class DetectFraudUseCaseTests
         resourceMock.Setup(r => r.GetMccRiskAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new MccRiskTable(new Dictionary<string, float>()));
 
-        var useCase = new DetectFraudUseCase(vectorizerMock.Object, searchMock.Object, resourceMock.Object);
+        var options = new FraudDetectionOptions { KnnK = 5, FraudThreshold = 0.6f };
+        var useCase = new DetectFraudUseCase(vectorizerMock.Object, searchMock.Object, resourceMock.Object, options);
 
         var result = await useCase.ExecuteAsync(payload, CancellationToken.None);
 

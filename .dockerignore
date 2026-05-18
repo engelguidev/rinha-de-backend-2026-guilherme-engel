@@ -9,7 +9,6 @@
 **/*.nupkg
 **/*.snupkg
 **/node_modules/
-resources/
 docs/
 *.txt
 /branch-submission
