@@ -17,9 +17,7 @@ services:
         hard: 65536
 
   api1:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: engelguidev/rinha-fraud-api:latest
     environment:
       - UDS_PATH=/run/uds/api1.sock
 
@@ -41,7 +39,7 @@ services:
       # MELHOR CONFIG ENCONTRADA
       - IVF_CLUSTERS=128
       - IVF_NPROBE=1
-      - IVF_MAX_VECTORS=64
+      - IVF_MAX_VECTORS=32
       - IVF_ITERS=7
 
       # KNN
@@ -70,9 +68,7 @@ services:
     mem_limit: 160m
 
   api2:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: engelguidev/rinha-fraud-api:latest
     environment:
       - UDS_PATH=/run/uds/api2.sock
 
@@ -94,7 +90,7 @@ services:
       # MELHOR CONFIG ENCONTRADA
       - IVF_CLUSTERS=128
       - IVF_NPROBE=1
-      - IVF_MAX_VECTORS=64
+      - IVF_MAX_VECTORS=32
       - IVF_ITERS=7
 
       # KNN
