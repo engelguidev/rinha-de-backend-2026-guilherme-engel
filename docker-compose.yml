@@ -33,9 +33,9 @@ services:
       - USE_IVF=true
 
       # IVF
-      - IVF_CLUSTERS=128
+      - IVF_CLUSTERS=32
       - IVF_NPROBE=1
-      - IVF_MAX_VECTORS=64
+      - IVF_MAX_VECTORS=8
       - IVF_ITERS=7
 
       # KNN
@@ -49,10 +49,10 @@ services:
       - PARTITION_ONLY=true
 
       # ThreadPool
-      - TP_MIN_WORKERS=4
-      - TP_MAX_WORKERS=4
-      - TP_MIN_IO=2
-      - TP_MAX_IO=4
+      - TP_MIN_WORKERS=1
+      - TP_MAX_WORKERS=2
+      - TP_MIN_IO=1
+      - TP_MAX_IO=2
 
       # ASP.NET
       - KESTREL_BACKLOG=4096
@@ -79,9 +79,9 @@ services:
       - USE_IVF=true
 
       # IVF
-      - IVF_CLUSTERS=128
+      - IVF_CLUSTERS=32
       - IVF_NPROBE=1
-      - IVF_MAX_VECTORS=64
+      - IVF_MAX_VECTORS=8
       - IVF_ITERS=7
 
       # KNN
@@ -95,10 +95,10 @@ services:
       - PARTITION_ONLY=true
 
       # ThreadPool
-      - TP_MIN_WORKERS=4
-      - TP_MAX_WORKERS=4
-      - TP_MIN_IO=2
-      - TP_MAX_IO=4
+      - TP_MIN_WORKERS=1
+      - TP_MAX_WORKERS=2
+      - TP_MIN_IO=1
+      - TP_MAX_IO=2
 
       # ASP.NET
       - KESTREL_BACKLOG=4096
