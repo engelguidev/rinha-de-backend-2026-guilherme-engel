@@ -8,7 +8,7 @@ services:
     depends_on:
       - api1
       - api2
-    cpus: "0.16"
+    cpus: "0.10"
     mem_limit: 30m
     ulimits:
       nofile:
@@ -58,7 +58,7 @@ services:
       - KESTREL_BACKLOG=4096
       - ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT=Warning
 
-    cpus: "0.42"
+    cpus: "0.45"
     mem_limit: 160m
 
   api2:
@@ -104,7 +104,7 @@ services:
       - KESTREL_BACKLOG=4096
       - ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT=Warning
 
-    cpus: "0.42"
+    cpus: "0.45"
     mem_limit: 160m
 
 networks:
