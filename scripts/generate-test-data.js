@@ -19,16 +19,11 @@ const fraudMerchants = [
   { id: 'MERC-010', mcc: '5999' }, // 0.50
 ];
 
-const total = 54100;
-const fraudCount = 24058;
-const legitCount = 30042;
-const edgeCaseCount = 797;
-const edgeStart = fraudCount + legitCount;
 const entries = [];
 
-for (let i = 0; i < total; i++) {
-  // 0..fraudCount-1: fraud, fraudCount..edgeStart-1: legit, edgeStart..total-1: edge cases
-  const isFraud = i < fraudCount ? true : i < edgeStart ? false : Math.random() > 0.5;
+for (let i = 0; i < 1000; i++) {
+  // 0-349: fraud (35%), 350-949: legit (60%), 950-999: edge cases (5%)
+  const isFraud = i < 350 ? true : i < 950 ? false : Math.random() > 0.5;
 
   // Merchant separado por perfil: fraudes usam MCCs de alto risco, legítimos de baixo risco
   const merchant = isFraud
@@ -62,7 +57,9 @@ for (let i = 0; i < total; i++) {
   const now = new Date(Date.now() - Math.random() * 86400000);
   const lastTxTime = new Date(now.getTime() - Math.random() * 3600000);
 
-  const request = {
+  const entry = {
+    id: `tx-${String(Math.floor(Math.random() * 10000000000)).padStart(10, '0')}`,
+    expected_approved: isFraud ? false : true,
     transaction: {
       amount: parseFloat(amount.toFixed(2)),
       installments: installments,
@@ -91,28 +88,20 @@ for (let i = 0; i < total; i++) {
         }
   };
 
-  const entry = {
-    id: `tx-${String(Math.floor(Math.random() * 10000000000)).padStart(10, '0')}`,
-    expected_approved: isFraud ? false : true,
-    request,
-    ...request
-  };
-
   entries.push(entry);
 }
 
 const data = {
   stats: {
-    total,
-    fraud_count: fraudCount,
-    legit_count: legitCount,
-    fraud_rate: +(fraudCount / total).toFixed(4),
-    legit_rate: +(legitCount / total).toFixed(4),
-    edge_case_count: edgeCaseCount,
-    edge_case_rate: +(edgeCaseCount / total).toFixed(4)
+    total: 1000,
+    fraud_count: 350,
+    fraud_rate: 35.0,
+    legit_count: 600,
+    legit_rate: 60.0,
+    edge_case_rate: 5.0
   },
   entries
 };
 
 fs.writeFileSync('test-data.json', JSON.stringify(data, null, 2));
-console.log(`test-data.json criado com ${total} transacoes no formato correto`);
+console.log('test-data.json criado com 1000 transacoes no formato correto');

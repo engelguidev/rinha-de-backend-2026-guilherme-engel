@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rinha.FraudDetection.Application.Interfaces;
@@ -25,7 +26,18 @@ public sealed class IndexWarmupService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _readiness.MarkNotReady();
+        var eager = string.Equals(Environment.GetEnvironmentVariable("READINESS_EAGER"), "true", StringComparison.OrdinalIgnoreCase);
+
+        if (!eager)
+        {
+            _readiness.MarkNotReady();
+        }
+        else
+        {
+            _readiness.MarkReady();
+            _logger.LogInformation("Eager readiness enabled: marked ready before warmup.");
+        }
+
         var delay = TimeSpan.FromMilliseconds(250);
 
         while (!stoppingToken.IsCancellationRequested)
@@ -42,7 +54,14 @@ public sealed class IndexWarmupService : BackgroundService
             }
             catch (Exception ex)
             {
-                _readiness.MarkNotReady();
+                if (!eager)
+                {
+                    _readiness.MarkNotReady();
+                }
+                else
+                {
+                    _logger.LogWarning(ex, "Warmup failed but eager readiness enabled; keeping readiness=true. Retrying in {DelayMs}ms.", delay.TotalMilliseconds);
+                }
                 _logger.LogError(ex, "Warmup failed. Retrying in {DelayMs}ms.", delay.TotalMilliseconds);
             }
 

@@ -55,10 +55,10 @@ services:
       - PARTITION_ONLY=true
 
       # ThreadPool
-      - TP_MIN_WORKERS=4
-      - TP_MAX_WORKERS=4
-      - TP_MIN_IO=2
-      - TP_MAX_IO=4
+      - TP_MIN_WORKERS=1
+      - TP_MAX_WORKERS=2
+      - TP_MIN_IO=1
+      - TP_MAX_IO=2
 
       # ASP.NET
       - KESTREL_BACKLOG=4096
@@ -108,10 +108,10 @@ services:
       - PARTITION_ONLY=true
 
       # ThreadPool
-      - TP_MIN_WORKERS=4
-      - TP_MAX_WORKERS=4
-      - TP_MIN_IO=2
-      - TP_MAX_IO=4
+      - TP_MIN_WORKERS=1
+      - TP_MAX_WORKERS=2
+      - TP_MIN_IO=1
+      - TP_MAX_IO=2
 
       # ASP.NET
       - KESTREL_BACKLOG=4096
