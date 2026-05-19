@@ -124,10 +124,7 @@ services:
 
 volumes:
   uds:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-
+  
 networks:
   app:
     driver: bridge
