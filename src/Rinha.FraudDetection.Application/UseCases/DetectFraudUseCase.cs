@@ -36,7 +36,12 @@ public sealed class DetectFraudUseCase
             return new FraudDecision(true, 0.0f);
         }
 
+        if (outcome.Total < k)
+        {
+            Console.Error.WriteLine($"KNN returned {outcome.Total}/{k} neighbors.");
+        }
+
         var score = (float)outcome.FraudCount / outcome.Total;
-        return new FraudDecision(score <= _options.FraudThreshold, score);
+        return new FraudDecision(score < _options.FraudThreshold, score);
     }
 }

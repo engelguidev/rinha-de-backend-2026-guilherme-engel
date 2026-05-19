@@ -62,9 +62,7 @@ for (let i = 0; i < total; i++) {
   const now = new Date(Date.now() - Math.random() * 86400000);
   const lastTxTime = new Date(now.getTime() - Math.random() * 3600000);
 
-  const entry = {
-    id: `tx-${String(Math.floor(Math.random() * 10000000000)).padStart(10, '0')}`,
-    expected_approved: isFraud ? false : true,
+  const request = {
     transaction: {
       amount: parseFloat(amount.toFixed(2)),
       installments: installments,
@@ -91,6 +89,13 @@ for (let i = 0; i < total; i++) {
           timestamp: lastTxTime.toISOString(),
           km_from_current: parseFloat((Math.random() * 5).toFixed(10))
         }
+  };
+
+  const entry = {
+    id: `tx-${String(Math.floor(Math.random() * 10000000000)).padStart(10, '0')}`,
+    expected_approved: isFraud ? false : true,
+    request,
+    ...request
   };
 
   entries.push(entry);

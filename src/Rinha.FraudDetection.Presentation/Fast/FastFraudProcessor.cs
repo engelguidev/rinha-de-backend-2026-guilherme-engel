@@ -26,6 +26,11 @@ public sealed class FastFraudProcessor
 
     public float Score(ReadOnlySpan<byte> body)
     {
+        if (body.IsEmpty)
+        {
+            return 0f;
+        }
+
         EnsureResources();
 
         var normalization = _normalization;
@@ -35,19 +40,26 @@ public sealed class FastFraudProcessor
             return 0f;
         }
 
-        if (!TryParse(body, normalization, mccRisk, out var vector))
+        try
+        {
+            if (!TryParse(body, normalization, mccRisk, out var vector))
+            {
+                return 0f;
+            }
+
+            var k = _options.KnnK <= 0 ? 5 : _options.KnnK;
+            var outcome = _search.SearchAsync(vector, k, CancellationToken.None).GetAwaiter().GetResult();
+            if (outcome.Total == 0)
+            {
+                return 0f;
+            }
+
+            return (float)outcome.FraudCount / outcome.Total;
+        }
+        catch (JsonException)
         {
             return 0f;
         }
-
-        var k = _options.KnnK <= 0 ? 5 : _options.KnnK;
-        var outcome = _search.SearchAsync(vector, k, CancellationToken.None).GetAwaiter().GetResult();
-        if (outcome.Total == 0)
-        {
-            return 0f;
-        }
-
-        return (float)outcome.FraudCount / outcome.Total;
     }
 
     public float Score(byte[] body)
@@ -68,13 +80,10 @@ public sealed class FastFraudProcessor
             {
                 return;
             }
-        }
 
-        var normalization = _resources.GetNormalizationAsync(CancellationToken.None).GetAwaiter().GetResult();
-        var mccRisk = _resources.GetMccRiskAsync(CancellationToken.None).GetAwaiter().GetResult();
+            var normalization = _resources.GetNormalizationAsync(CancellationToken.None).GetAwaiter().GetResult();
+            var mccRisk = _resources.GetMccRiskAsync(CancellationToken.None).GetAwaiter().GetResult();
 
-        lock (_initLock)
-        {
             _normalization ??= new NormalizationRuntime(normalization);
             _mccRisk ??= mccRisk;
         }
@@ -219,7 +228,7 @@ public sealed class FastFraudProcessor
             var values = new float[14];
             values[0] = Clamp(amount * norm.InvMaxAmount);
             values[1] = Clamp(installments * norm.InvMaxInstallments);
-            var ratio = customerAvg > 0 ? (amount / customerAvg) * norm.InvAmountVsAvgRatio : 1.0;
+            var ratio = customerAvg > 0 ? (amount / customerAvg) * norm.InvAmountVsAvgRatio : 0.0;
             values[2] = Clamp(ratio);
 
             values[3] = requestedAt.Hour / 23f;

@@ -55,11 +55,10 @@ export default function () {
     if (idx >= testData.length) return;
     const entry = testData[idx];
     const expectedApproved = entry.expected_approved;
-    const payload = entry.request ?? entry;
 
     const res = http.post(
         'http://localhost:9999/fraud-score',
-        JSON.stringify(payload),
+        JSON.stringify(entry.request),
         { headers: { 'Content-Type': 'application/json' }, timeout: '2001ms' }
     );
 
