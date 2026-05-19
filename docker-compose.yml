@@ -23,7 +23,7 @@ services:
 
       # Runtime
       - DOTNET_GCHeapCount=1
-      - DOTNET_PROCESSOR_COUNT=1
+      - DOTNET_PROCESSOR_COUNT=0
       - DOTNET_ThreadPool_UnfairSemaphoreSpinLimit=0
       - GC_LATENCY_MODE=sustained
 
@@ -74,7 +74,7 @@ services:
 
       # Runtime
       - DOTNET_GCHeapCount=1
-      - DOTNET_PROCESSOR_COUNT=1
+      - DOTNET_PROCESSOR_COUNT=0
       - DOTNET_ThreadPool_UnfairSemaphoreSpinLimit=0
       - GC_LATENCY_MODE=sustained
 
